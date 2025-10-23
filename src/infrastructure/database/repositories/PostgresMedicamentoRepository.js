@@ -15,7 +15,8 @@ class PostgresMedicamentoRepository {
         nome: medicamentoData.nome,
         dosagem: medicamentoData.dosagem,
         unidade_medida: medicamentoData.unidade_medida,
-        substancia: medicamentoData.substancia || null,
+        principio_ativo: medicamentoData.principio_ativo || null,
+        estoque_minimo: medicamentoData.estoque_minimo,
       });
 
       return new Medicamento(
@@ -23,7 +24,8 @@ class PostgresMedicamentoRepository {
         medicamentoRecord.nome,
         medicamentoRecord.dosagem,
         medicamentoRecord.unidade_medida,
-        medicamentoRecord.substancia
+        medicamentoRecord.principio_ativo,
+        medicamentoRecord.estoque_minimo
       );
     } catch (error) {
 

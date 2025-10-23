@@ -19,8 +19,12 @@ const MedicamentoModel = sequelize.define('Medicamento', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  substancia: {
+  principio_ativo: {
     type: DataTypes.STRING,
+  },
+  estoque_minimo: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
 }, {
   tableName: 'medicamento', // Nome exato da tabela no banco
