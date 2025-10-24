@@ -22,23 +22,22 @@ CREATE TABLE PACIENTE (
 
 CREATE TABLE ARMARIO (
     num_armario INT PRIMARY KEY,
-    categoria VARCHAR(255) NOT NULL,
-    descricao VARCHAR(255) NOT NULL
+    categoria VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE EQUIPAMENTO (
+CREATE TABLE INSUMO (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     descricao VARCHAR(255)
 );
 
-CREATE TABLE ESTOQUE_EQUIPAMENTO (
+CREATE TABLE ESTOQUE_INSUMO (
     id SERIAL PRIMARY KEY,
-    equipamento_id INT NOT NULL,
+    insumo_id INT NOT NULL,
     armario_id INT NOT NULL,
     quantidade INT NOT NULL,
-    UNIQUE (equipamento_id, armario_id),
-    FOREIGN KEY (equipamento_id) REFERENCES equipamento(id),
+    UNIQUE (insumo_id, armario_id),
+    FOREIGN KEY (insumo_id) REFERENCES insumo(id),
     FOREIGN KEY (armario_id) REFERENCES armario(num_armario)
 );
 
@@ -56,7 +55,7 @@ CREATE TABLE ESTOQUE_MEDICAMENTO (
     FOREIGN KEY (armario_id) REFERENCES armario(num_armario)
 );
 
-CREATE TABLE movimentacao (
+CREATE TABLE MOVIMENTACAO (
     id SERIAL PRIMARY KEY,
     tipo VARCHAR(255) NOT NULL,
     data TIMESTAMP NOT NULL,
@@ -66,7 +65,7 @@ CREATE TABLE movimentacao (
     armario_id INT NOT NULL,
     casela_id INT,
     FOREIGN KEY (login_id) REFERENCES login(id),
-    FOREIGN KEY (equipamento_id) REFERENCES equipamento(id),
+    FOREIGN KEY (insumo_id) REFERENCES insumo(id),
     FOREIGN KEY (medicamento_id) REFERENCES medicamento(id),
     FOREIGN KEY (armario_id) REFERENCES armario(num_armario),
     FOREIGN KEY (casela_id) REFERENCES paciente(num_casela)
