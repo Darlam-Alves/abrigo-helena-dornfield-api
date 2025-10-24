@@ -79,8 +79,7 @@ Configure uma nova requisição no Postman com os seguintes detalhes para criar 
 -   **URL:** `http://localhost:3001/api/medicamentos`
 -   **Body** (selecione `raw` e `JSON`):
 
-```
-    json
+```json
     {
         "nome": "Dipirona 500mg",
         "dosagem": 500,
