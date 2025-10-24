@@ -77,3 +77,16 @@ node_modules/
 ### 6. Rodar o projeto
 ```npm start```
 
+### 7. Usar o postman para testar as requisições e validar na base de dados
+ex: POST http://localhost:3001/api/medicamentos
+{ 
+    "nome": "dipirona", 
+    "dosagem": 1, 
+    "unidade_medida": "g", 
+    "principio_ativo": "dipirona", 
+    "estoque_minimo": 10 
+}
+verificar no terminal na execução do banco de dados postgres se o medicamento foi inserido no banco de dados 
+fazendo um SELECT na respectiva tabela
+
+```SELECT * FROM medicamento```
