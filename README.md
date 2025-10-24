@@ -58,7 +58,7 @@ DB_HOST=localhost
 DB_USER=
 DB_PASSWORD=
 DB_NAME=helena_dornfield_db
-DB_PORT=5432 
+DB_PORT=5432 ```
 
 ### 5. criar arquivo .gitignore para ignorar módulos do node, variáveis de ambiente e etc:
 
