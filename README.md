@@ -22,29 +22,11 @@ Primeiro, clone o repositório do GitHub para a sua máquina local.
 ### 3. Configurar o Banco de Dados PostgreSQL
 ```psql -U seu_usuario_aqui -d postgres -c "CREATE DATABASE helena_dornfield_db;"```
 
-### 4. 
+
+### 4. Criar as tabelas com base no Schema
 ```psql -U seu_usuario_aqui -d helena_dornfield_db -f database/initial_schema.sql```
 
-
-#### a. Crie o Banco de Dados
-
-Conecte-se ao psql como seu usuário principal e crie o banco de dados vazio.
-Bash
-
-# Conecta ao psql e executa o comando CREATE DATABASE
-```psql -U seu_usuario_aqui -d postgres -c "CREATE DATABASE helena_dornfield_db;"```
-
-Nota: Substitua seu_usuario_aqui pelo seu nome de usuário do PostgreSQL.
-
-b. Crie as Tabelas
-
-Execute o script de schema para criar todas as tabelas necessárias dentro do banco de dados que você acabou de criar.
-Bash
-
-# Executa o arquivo de schema no banco de dados correto
-```psql -U seu_usuario_aqui -d helena_dornfield_db -f database/initial_schema.sql```
-
-### 4. Configurar as Variáveis de Ambiente
+### 5. Configurar as Variáveis de Ambiente
 
 As variáveis de ambiente guardam informações sensíveis e de configuração, como as senhas do banco de dados.
 
@@ -68,24 +50,19 @@ Este arquivo é crucial para ignorar módulos do Node (`node_modules`), variáve
 
 Verifique se o arquivo `.gitignore` existe na raiz do projeto. Se não, crie-o com o seguinte conteúdo:
 
-```gitignore
-# Arquivos de log
+```
+gitignore
 npm-debug.log*
 yarn-error.log
 lerna-debug.log
-
-# Pasta de dependências
 node_modules/
-
-# Arquivos de ambiente (SEGURANÇA!)
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-# Outros arquivos de log
 *.log
+```
 
 ### 6. Rodar o projeto
 ```npm start```
@@ -102,7 +79,8 @@ Configure uma nova requisição no Postman com os seguintes detalhes para criar 
 -   **URL:** `http://localhost:3001/api/medicamentos`
 -   **Body** (selecione `raw` e `JSON`):
 
-    ```json
+```
+    json
     {
         "nome": "Dipirona 500mg",
         "dosagem": 500,
@@ -110,7 +88,7 @@ Configure uma nova requisição no Postman com os seguintes detalhes para criar 
         "principio_ativo": "Dipirona Sódica",
         "estoque_minimo": 10
     }
-    ```
+```
 
 #### b. Como Validar no Banco de Dados
 
