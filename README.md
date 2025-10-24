@@ -52,13 +52,15 @@ As variáveis de ambiente guardam informações sensíveis e de configuração, 
 Crie uma cópia do arquivo `.env` abaixo substituindo pelo seu `DB_USER` e `DB_PASSWORD`
 
 #### b. Preencha o arquivo `.env` 
-```env
+```
+env
 PORT=3001
 DB_HOST=localhost
 DB_USER=
 DB_PASSWORD=
 DB_NAME=helena_dornfield_db
-DB_PORT=5432 ```
+DB_PORT=5432 
+``` 
 
 ### 5. Configurar o `.gitignore`
 
