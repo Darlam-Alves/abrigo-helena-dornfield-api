@@ -60,12 +60,16 @@ DB_PASSWORD=
 DB_NAME=helena_dornfield_db
 DB_PORT=5432 ```
 
-### 5. criar arquivo .gitignore para ignorar módulos do node, variáveis de ambiente e etc:
+### 5. Configurar o `.gitignore`
 
-# Arquivos de logx
+Este arquivo é crucial para ignorar módulos do Node (`node_modules`), variáveis de ambiente (`.env`) e outros arquivos que não devem ir para o repositório.
+
+Verifique se o arquivo `.gitignore` existe na raiz do projeto. Se não, crie-o com o seguinte conteúdo:
+
+```gitignore
+# Arquivos de log
 npm-debug.log*
 yarn-error.log
-yarn-debug.log
 lerna-debug.log
 
 # Pasta de dependências
@@ -78,6 +82,7 @@ node_modules/
 .env.test.local
 .env.production.local
 
+# Outros arquivos de log
 *.log
 
 ### 6. Rodar o projeto
