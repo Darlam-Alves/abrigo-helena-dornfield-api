@@ -60,7 +60,7 @@ CREATE TABLE MOVIMENTACAO (
     tipo VARCHAR(255) NOT NULL,
     data TIMESTAMP NOT NULL,
     login_id INT NOT NULL,
-    equipamento_id INT,
+    insumo_id INT,
     medicamento_id INT,
     armario_id INT NOT NULL,
     casela_id INT,
