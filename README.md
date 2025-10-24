@@ -34,8 +34,7 @@ As variáveis de ambiente guardam informações sensíveis e de configuração, 
 Crie uma cópia do arquivo `.env` abaixo substituindo pelo seu `DB_USER` e `DB_PASSWORD`
 
 #### b. Preencha o arquivo `.env` 
-```
-env
+```env
 PORT=3001
 DB_HOST=localhost
 DB_USER=
@@ -50,8 +49,7 @@ Este arquivo é crucial para ignorar módulos do Node (`node_modules`), variáve
 
 Verifique se o arquivo `.gitignore` existe na raiz do projeto. Se não, crie-o com o seguinte conteúdo:
 
-```
-gitignore
+```gitignore
 npm-debug.log*
 yarn-error.log
 lerna-debug.log
