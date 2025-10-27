@@ -64,9 +64,11 @@ CREATE TABLE MOVIMENTACAO (
     medicamento_id INT,
     armario_id INT NOT NULL,
     casela_id INT,
+    validade_medicamento DATE,
     FOREIGN KEY (login_id) REFERENCES login(id),
     FOREIGN KEY (insumo_id) REFERENCES insumo(id),
     FOREIGN KEY (medicamento_id) REFERENCES medicamento(id),
     FOREIGN KEY (armario_id) REFERENCES armario(num_armario),
+    FOREIGN KEY (validade_medicamento) REFERENCES medicamento(validade),
     FOREIGN KEY (casela_id) REFERENCES paciente(num_casela)
 );  
