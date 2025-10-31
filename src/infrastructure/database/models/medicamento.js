@@ -27,7 +27,7 @@ const MedicamentoModel = sequelize.define('Medicamento', {
     allowNull: false,
   },
 }, {
-  tableName: 'medicamento', // Nome exato da tabela no banco
+  tableName: 'medicamento', 
   timestamps: false, 
 });
 

@@ -69,6 +69,5 @@ CREATE TABLE MOVIMENTACAO (
     FOREIGN KEY (insumo_id) REFERENCES insumo(id),
     FOREIGN KEY (medicamento_id) REFERENCES medicamento(id),
     FOREIGN KEY (armario_id) REFERENCES armario(num_armario),
-    FOREIGN KEY (validade_medicamento) REFERENCES medicamento(validade),
     FOREIGN KEY (casela_id) REFERENCES paciente(num_casela)
 );  
