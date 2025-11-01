@@ -19,14 +19,17 @@ const sequelize = new Sequelize(
 );
 
 
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('✓ Conexão com o banco de dados estabelecida com sucesso.');
-  })
-  .catch((error) => {
-    console.error('✗ Erro ao conectar ao banco de dados:', error.message);
-  });
+// Apenas tenta conectar se NÃO estiver em ambiente de teste
+if (process.env.NODE_ENV !== 'test') {
+  sequelize
+    .authenticate()
+    .then(() => {
+      console.log('✓ Conexão com o banco de dados estabelecida com sucesso.');
+    })
+    .catch((error) => {
+      console.error('✗ Erro ao conectar ao banco de dados:', error.message);
+    });
+}
 
 module.exports = sequelize;
 

@@ -10,7 +10,7 @@ class MedicamentoService {
      */
     async cadastrarNovo(medicamentoData) {
       // 1. APLICAÇÃO DA LÓGICA DE NEGÓCIO (VALIDAÇÃO)
-      if (!medicamentoData.nome || !medicamentoData.dosagem || !medicamentoData.unidade_medida) {
+      if (!medicamentoData.nome || medicamentoData.dosagem === undefined || medicamentoData.dosagem === null || !medicamentoData.unidade_medida) {
         throw new Error('Nome, dosagem e unidade de medida são campos obrigatórios.');
       }
       
