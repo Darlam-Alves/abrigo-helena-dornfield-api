@@ -5,6 +5,10 @@ const MedicamentoController = require('../controllers/medicamento');
 const MedicamentoService = require('../../../core/application/services/medicamento');
 const PostgresMedicamentoRepository = require('../../database/repositories/PostgresMedicamentoRepository');
 
+const InsumoController = require('../controllers/insumo');
+const InsumoService = require('../../../core/application/services/insumo');
+const PostgresInsumoRepository = require('../../database/repositories/PostgresInsumoRepository');
+
 const ArmarioController = require('../controllers/armario');
 const ArmarioService = require('../../../core/application/services/armario');
 const PostgresArmarioRepository = require('../../database/repositories/PostgresArmarioRepository');
@@ -16,6 +20,10 @@ const PostgresResidenteRepository = require('../../database/repositories/Postgre
 const medicamentoRepository = new PostgresMedicamentoRepository();
 const medicamentoService = new MedicamentoService(medicamentoRepository);
 const medicamentoController = new MedicamentoController(medicamentoService);
+
+const insumoRepository = new PostgresInsumoRepository();
+const insumoService = new InsumoService(insumoRepository);
+const insumoController = new InsumoController(insumoService);
 
 const armarioRepository = new PostgresArmarioRepository();
 const armarioService = new ArmarioService(armarioRepository);
@@ -30,6 +38,9 @@ router.post('/medicamentos', (req, res) => medicamentoController.create(req, res
 
 // Define a rota POST para cadastrar um armário
 router.post('/armarios', (req, res) => armarioController.create(req, res));
+
+// Define a rota POST para cadastrar um insumo
+router.post('/insumos', (req, res) => insumoController.create(req, res));
 
 // Rotas para residentes
 router.get('/residentes', (req, res) => residenteController.findAll(req, res));
