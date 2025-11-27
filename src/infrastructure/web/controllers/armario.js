@@ -25,8 +25,56 @@ class ArmarioController {
     }
   }
 
-  // async getAll(req, res) { ... }
-  // async getByNumero(req, res) { ... }
+  /**
+   * Handler para a rota GET /armarios.
+   * Lista todos os armários cadastrados.
+   */
+  async getAll(req, res) {
+    try {
+      const armarios = await this.armarioService.listarTodos();
+      res.status(200).json(armarios);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
+
+  /**
+   * Handler para a rota GET /armarios/:numero.
+   * Busca um armário específico pelo número.
+   */
+  async getByNumero(req, res) {
+    try {
+      const numero = parseInt(req.params.numero);
+      const armario = await this.armarioService.buscarPorNumero(numero);
+      res.status(200).json(armario);
+    } catch (error) {
+      if (error.message === 'Armário não encontrado.') {
+        res.status(404).json({ message: error.message });
+      } else {
+        res.status(400).json({ message: error.message });
+      }
+    }
+  }
+
+  /**
+   * Handler para a rota DELETE /armarios/:numero.
+   * Deleta um armário específico pelo número.
+   */
+  async delete(req, res) {
+    try {
+      const numero = parseInt(req.params.numero);
+      await this.armarioService.deletar(numero);
+      res.status(200).json({ message: 'Armário deletado com sucesso.' });
+    } catch (error) {
+      if (error.message === 'Armário não encontrado.') {
+        res.status(404).json({ message: error.message });
+      } else if (error.message.includes('contém insumos ou medicamentos')) {
+        res.status(409).json({ message: error.message }); // 409 Conflict
+      } else {
+        res.status(400).json({ message: error.message });
+      }
+    }
+  }
 }
 
 module.exports = ArmarioController;
