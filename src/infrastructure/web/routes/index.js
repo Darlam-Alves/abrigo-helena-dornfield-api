@@ -36,8 +36,11 @@ const residenteController = new ResidenteController(residenteService);
 // Define a rota POST para cadastrar um medicamento
 router.post('/medicamentos', (req, res) => medicamentoController.create(req, res));
 
-// Define a rota POST para cadastrar um armário
+// Rotas para armários
+router.get('/armarios', (req, res) => armarioController.getAll(req, res));
+router.get('/armarios/:numero', (req, res) => armarioController.getByNumero(req, res));
 router.post('/armarios', (req, res) => armarioController.create(req, res));
+router.delete('/armarios/:numero', (req, res) => armarioController.delete(req, res));
 
 // Define a rota POST para cadastrar um insumo
 router.post('/insumos', (req, res) => insumoController.create(req, res));
