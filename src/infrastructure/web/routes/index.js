@@ -33,8 +33,12 @@ const residenteRepository = new PostgresResidenteRepository();
 const residenteService = new ResidenteService(residenteRepository);
 const residenteController = new ResidenteController(residenteService);
 
-// Define a rota POST para cadastrar um medicamento
+// Rotas para medicamentos
+router.get('/medicamentos', (req, res) => medicamentoController.getAll(req, res));
+router.get('/medicamentos/:id', (req, res) => medicamentoController.getById(req, res));
 router.post('/medicamentos', (req, res) => medicamentoController.create(req, res));
+router.put('/medicamentos/:id', (req, res) => medicamentoController.update(req, res));
+router.delete('/medicamentos/:id', (req, res) => medicamentoController.delete(req, res));
 
 // Rotas para armários
 router.get('/armarios', (req, res) => armarioController.getAll(req, res));
