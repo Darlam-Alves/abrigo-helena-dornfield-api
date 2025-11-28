@@ -47,7 +47,11 @@ router.post('/armarios', (req, res) => armarioController.create(req, res));
 router.delete('/armarios/:numero', (req, res) => armarioController.delete(req, res));
 
 // Define a rota POST para cadastrar um insumo
+router.get('/insumos', (req, res) => insumoController.getAll(req, res));
+router.get('/insumos/:id', (req, res) => insumoController.getById(req, res));
 router.post('/insumos', (req, res) => insumoController.create(req, res));
+router.put('/insumos/:id', (req, res) => insumoController.update(req, res));
+router.delete('/insumos/:id', (req, res) => insumoController.delete(req, res));
 
 // Rotas para residentes
 router.get('/residentes', (req, res) => residenteController.findAll(req, res));
