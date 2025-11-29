@@ -18,6 +18,8 @@ Primeiro, clone o repositório do GitHub para a sua máquina local.
 
 ### 2. Instalar dependências do projeto
 ```npm install```
+```npm install bcrypt jsonwebtoken```
+
 
 ### 3. Configurar o Banco de Dados PostgreSQL
 ```psql -U seu_usuario_aqui -d postgres -c "CREATE DATABASE helena_dornfield_db;"```

@@ -17,6 +17,10 @@ const ResidenteController = require('../controllers/residente');
 const ResidenteService = require('../../../core/application/services/residente');
 const PostgresResidenteRepository = require('../../database/repositories/PostgresResidenteRepository');
 
+const LoginController = require('../controllers/login');
+const LoginService = require('../../../core/application/services/login');
+const PostgresLoginRepository = require('../../database/repositories/PostgresLoginRepository');
+
 const medicamentoRepository = new PostgresMedicamentoRepository();
 const medicamentoService = new MedicamentoService(medicamentoRepository);
 const medicamentoController = new MedicamentoController(medicamentoService);
@@ -33,6 +37,10 @@ const residenteRepository = new PostgresResidenteRepository();
 const residenteService = new ResidenteService(residenteRepository);
 const residenteController = new ResidenteController(residenteService);
 
+const loginRepository = new PostgresLoginRepository();
+const loginService = new LoginService(loginRepository);
+const loginController = new LoginController(loginService);
+
 // Rotas para medicamentos
 router.get('/medicamentos', (req, res) => medicamentoController.getAll(req, res));
 router.get('/medicamentos/:id', (req, res) => medicamentoController.getById(req, res));
@@ -46,7 +54,7 @@ router.get('/armarios/:numero', (req, res) => armarioController.getByNumero(req,
 router.post('/armarios', (req, res) => armarioController.create(req, res));
 router.delete('/armarios/:numero', (req, res) => armarioController.delete(req, res));
 
-// Define a rota POST para cadastrar um insumo
+// Define a rota para insumos
 router.get('/insumos', (req, res) => insumoController.getAll(req, res));
 router.get('/insumos/:id', (req, res) => insumoController.getById(req, res));
 router.post('/insumos', (req, res) => insumoController.create(req, res));
@@ -59,5 +67,11 @@ router.get('/residentes/:casela', (req, res) => residenteController.findByCasela
 router.post('/residentes', (req, res) => residenteController.create(req, res));
 router.put('/residentes/:casela', (req, res) => residenteController.update(req, res));
 router.delete('/residentes/:casela', (req, res) => residenteController.delete(req, res));
+
+// Define a rotas para login
+router.get('/login', (req, res) => loginController.getAll(req, res));
+router.post('/login', (req, res) => loginController.create(req, res));
+router.put('/login/:id', (req, res) => loginController.update(req, res));
+router.post('/login/auth', (req, res) => loginController.auth(req, res));
 
 module.exports = router;
