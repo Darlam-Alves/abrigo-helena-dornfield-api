@@ -21,6 +21,10 @@ const LoginController = require('../controllers/login');
 const LoginService = require('../../../core/application/services/login');
 const PostgresLoginRepository = require('../../database/repositories/PostgresLoginRepository');
 
+const EstoqueInsumoController = require('../controllers/estoqueInsumo');
+const EstoqueInsumoService = require('../../../core/application/services/estoqueInsumo');
+const PostgresEstoqueInsumoRepository = require('../../database/repositories/PostgresEstoqueInsumoRepository');
+
 const medicamentoRepository = new PostgresMedicamentoRepository();
 const medicamentoService = new MedicamentoService(medicamentoRepository);
 const medicamentoController = new MedicamentoController(medicamentoService);
@@ -40,6 +44,10 @@ const residenteController = new ResidenteController(residenteService);
 const loginRepository = new PostgresLoginRepository();
 const loginService = new LoginService(loginRepository);
 const loginController = new LoginController(loginService);
+
+const estoqueInsumoRepository = new PostgresEstoqueInsumoRepository();
+const estoqueInsumoService = new EstoqueInsumoService(estoqueInsumoRepository);
+const estoqueInsumoController = new EstoqueInsumoController(estoqueInsumoService);
 
 // Rotas para medicamentos
 router.get('/medicamentos', (req, res) => medicamentoController.getAll(req, res));
@@ -73,5 +81,9 @@ router.get('/login', (req, res) => loginController.getAll(req, res));
 router.post('/login', (req, res) => loginController.create(req, res));
 router.put('/login/:id', (req, res) => loginController.update(req, res));
 router.post('/login/auth', (req, res) => loginController.auth(req, res));
+
+// Rotas para estoque de insumos
+router.post('/estoque-insumos/entrada', (req, res) => estoqueInsumoController.entrada(req, res));
+router.post('/estoque-insumos/saida', (req, res) => estoqueInsumoController.saida(req, res));
 
 module.exports = router;
