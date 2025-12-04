@@ -25,6 +25,10 @@ const EstoqueInsumoController = require('../controllers/estoqueInsumo');
 const EstoqueInsumoService = require('../../../core/application/services/estoqueInsumo');
 const PostgresEstoqueInsumoRepository = require('../../database/repositories/PostgresEstoqueInsumoRepository');
 
+const EstoqueMedicamentoController = require('../controllers/estoqueMedicamento');
+const EstoqueMedicamentoService = require('../../../core/application/services/estoqueMedicamento');
+const PostgresEstoqueMedicamentoRepository = require('../../database/repositories/PostgresEstoqueMedicamentoRepository');
+
 const medicamentoRepository = new PostgresMedicamentoRepository();
 const medicamentoService = new MedicamentoService(medicamentoRepository);
 const medicamentoController = new MedicamentoController(medicamentoService);
@@ -48,6 +52,10 @@ const loginController = new LoginController(loginService);
 const estoqueInsumoRepository = new PostgresEstoqueInsumoRepository();
 const estoqueInsumoService = new EstoqueInsumoService(estoqueInsumoRepository);
 const estoqueInsumoController = new EstoqueInsumoController(estoqueInsumoService);
+
+const estoqueMedicamentoRepository = new PostgresEstoqueMedicamentoRepository();
+const estoqueMedicamentoService = new EstoqueMedicamentoService(estoqueMedicamentoRepository);
+const estoqueMedicamentoController = new EstoqueMedicamentoController(estoqueMedicamentoService);
 
 // Rotas para medicamentos
 router.get('/medicamentos', (req, res) => medicamentoController.getAll(req, res));
@@ -85,5 +93,8 @@ router.post('/login/auth', (req, res) => loginController.auth(req, res));
 // Rotas para estoque de insumos
 router.post('/estoque-insumos/entrada', (req, res) => estoqueInsumoController.entrada(req, res));
 router.post('/estoque-insumos/saida', (req, res) => estoqueInsumoController.saida(req, res));
+
+router.post('/estoque-medicamentos/entrada', (req, res) => estoqueMedicamentoController.entrada(req, res));
+router.post('/estoque-medicamentos/saida', (req, res) => estoqueMedicamentoController.saida(req, res));
 
 module.exports = router;
