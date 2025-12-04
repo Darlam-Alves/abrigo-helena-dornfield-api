@@ -94,6 +94,7 @@ router.post('/login/auth', (req, res) => loginController.auth(req, res));
 router.post('/estoque-insumos/entrada', (req, res) => estoqueInsumoController.entrada(req, res));
 router.post('/estoque-insumos/saida', (req, res) => estoqueInsumoController.saida(req, res));
 
+router.get('/estoque-medicamentos', (req, res) => estoqueMedicamentoController.getAll(req, res));
 router.post('/estoque-medicamentos/entrada', (req, res) => estoqueMedicamentoController.entrada(req, res));
 router.post('/estoque-medicamentos/saida', (req, res) => estoqueMedicamentoController.saida(req, res));
 

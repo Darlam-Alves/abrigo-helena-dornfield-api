@@ -5,6 +5,19 @@ class EstoqueMedicamentoController {
     this.estoqueMedicamentoService = estoqueMedicamentoService;
   }
 
+    /**
+     * Handler para a rota GET /medicamentos.
+     * Lista todos os medicamentos cadastrados.
+     */
+    async getAll(req, res) {
+      try {
+        const estoqueMedicamentos = await this.estoqueMedicamentoService.listarTodos();
+        res.status(200).json(estoqueMedicamentos);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
+    }  
+
   /**
    * Handler para a rota POST /estoque-medicamentos/entrada.
    * Registra entrada de medicamento no estoque.
