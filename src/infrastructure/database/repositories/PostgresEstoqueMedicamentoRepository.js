@@ -2,6 +2,7 @@
 
 const { QueryTypes } = require('sequelize');
 const sequelize = require('../connection');
+const EstoqueMedicamentoModel = require('../models/estoqueMedicamento');
 
 class PostgresEstoqueMedicamentoRepository {
   /**
@@ -112,21 +113,31 @@ class PostgresEstoqueMedicamentoRepository {
   }
 
   /**
+   * Busca todos os medicamentos.
+   * @returns {Promise<EstoqueMedicamento[]>} 
+   */
+  async findAll() {
+    try {
+      return await EstoqueMedicamentoModel.findAll();
+    } catch (error) {
+      throw new Error(`Erro ao buscar medicamentos no estoque: ${error.message}`);
+    }
+  }
+
+  /**
    * Registra saída de medicamento (baixa no estoque)
    */
   async registrarSaida(saidaData) {
     try {
-      const { medicamento_id, armario_id, quantidade } = saidaData;
+      const { estoque_id, armario_id, quantidade } = saidaData;
 
       const [estoque] = await sequelize.query(
-        `SELECT id, quantidade, validade 
+        `SELECT id, quantidade 
          FROM estoque_medicamento
-         WHERE medicamento_id = :medicamento_id 
-           AND armario_id = :armario_id
-         ORDER BY validade ASC
-         LIMIT 1`,
+         WHERE id = :estoque_id 
+           AND armario_id = :armario_id`,
         {
-          replacements: { medicamento_id, armario_id },
+          replacements: { estoque_id, armario_id },
           type: QueryTypes.SELECT
         }
       );
@@ -154,13 +165,11 @@ class PostgresEstoqueMedicamentoRepository {
       );
 
       return {
-        id: estoque.id,
-        medicamento_id,
+        id: estoque_id,
         armario_id,
         quantidade_anterior: estoque.quantidade,
         quantidade_retirada: quantidade,
         quantidade_atual: novaQuantidade,
-        validade: estoque.validade
       };
 
     } catch (error) {

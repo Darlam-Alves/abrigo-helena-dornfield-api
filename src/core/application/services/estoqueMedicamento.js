@@ -4,6 +4,11 @@ class EstoqueMedicamentoService {
     constructor(estoqueMedicamentoRepository) {
       this.estoqueMedicamentoRepository = estoqueMedicamentoRepository;
     }
+
+    async listarTodos() {
+      const estoqueMedicamentos = await this.estoqueMedicamentoRepository.findAll();
+      return estoqueMedicamentos;
+    }
   
     /**
      * Registra entrada de medicamento no estoque.
@@ -107,19 +112,16 @@ class EstoqueMedicamentoService {
        * Registra saída
        */
       async registrarSaida(saidaData) {
-        const { medicamento_id, armario_id, quantidade } = saidaData;
+        const { estoque_id, armario_id, quantidade } = saidaData;
     
-        if (!medicamento_id) throw new Error('O campo medicamento_id é obrigatório.');
+        if (!estoque_id) throw new Error('O campo estoque_id é obrigatório.');
         if (!armario_id) throw new Error('O campo armario_id é obrigatório.');
         if (quantidade === undefined || quantidade === null)
           throw new Error('O campo quantidade é obrigatório.');
     
-        const validMedicamentoId = Number(medicamento_id);
+        const validEstoqueId = Number(estoque_id);
         const validArmarioId = Number(armario_id);
         const validQuantidade = Number(quantidade);
-    
-        if (isNaN(validMedicamentoId) || validMedicamentoId <= 0)
-          throw new Error('O medicamento_id deve ser um número positivo.');
     
         if (isNaN(validArmarioId) || validArmarioId <= 0)
           throw new Error('O armario_id deve ser um número positivo.');
@@ -127,14 +129,11 @@ class EstoqueMedicamentoService {
         if (isNaN(validQuantidade) || validQuantidade <= 0)
           throw new Error('A quantidade deve ser um número positivo.');
     
-        const medicamentoExiste = await this.estoqueMedicamentoRepository.medicamentoExiste(validMedicamentoId);
-        if (!medicamentoExiste) throw new Error('Medicamento não encontrado.');
-    
         const armarioExiste = await this.estoqueMedicamentoRepository.armarioExiste(validArmarioId);
         if (!armarioExiste) throw new Error('Armário não encontrado.');
     
         return await this.estoqueMedicamentoRepository.registrarSaida({
-          medicamento_id: validMedicamentoId,
+          estoque_id: validEstoqueId,
           armario_id: validArmarioId,
           quantidade: validQuantidade
         });
