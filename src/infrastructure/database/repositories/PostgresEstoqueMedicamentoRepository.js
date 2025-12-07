@@ -1,8 +1,8 @@
-// src/infrastructure/database/repositories/PostgresEstoqueMedicamentoRepository.js
-
 const { QueryTypes } = require('sequelize');
 const sequelize = require('../connection');
 const EstoqueMedicamentoModel = require('../models/estoqueMedicamento');
+const MedicamentoModel = require('../models/medicamento');
+const ResidenteModel = require('../models/residente');
 
 class PostgresEstoqueMedicamentoRepository {
   /**
@@ -21,7 +21,7 @@ class PostgresEstoqueMedicamentoRepository {
         validade,
         origem,
         casela_id, // pode ser null
-        tipo       // <-- CORRIGIDO: agora recebemos tipo
+        tipo 
       } = entradaData;
 
       // busca lote igual (mesma validade, mesmo medicamento e mesmo armário)
@@ -52,7 +52,7 @@ class PostgresEstoqueMedicamentoRepository {
               quantidade: novaQuantidade,
               origem,
               casela_id,
-              tipo,            // <-- CORRIGIDO: agora está no replacements
+              tipo,
               id: loteExistente.id
             },
             type: QueryTypes.UPDATE
@@ -87,7 +87,7 @@ class PostgresEstoqueMedicamentoRepository {
             validade,
             origem,
             casela_id,
-            tipo              // <-- CORRIGIDO
+            tipo
           },
           type: QueryTypes.INSERT
         }
@@ -118,7 +118,17 @@ class PostgresEstoqueMedicamentoRepository {
    */
   async findAll() {
     try {
-      return await EstoqueMedicamentoModel.findAll();
+      return await EstoqueMedicamentoModel.findAll({
+        include: [{
+          model: MedicamentoModel,
+          as: 'medicamento',
+          attributes: ['nome', 'principio_ativo', 'unidade_medida', 'estoque_minimo']
+        },{
+          model: ResidenteModel,
+          as: 'residente',
+          attributes: ['nome']
+        }]
+      });
     } catch (error) {
       throw new Error(`Erro ao buscar medicamentos no estoque: ${error.message}`);
     }
@@ -134,8 +144,7 @@ class PostgresEstoqueMedicamentoRepository {
       const [estoque] = await sequelize.query(
         `SELECT id, quantidade 
          FROM estoque_medicamento
-         WHERE id = :estoque_id 
-           AND armario_id = :armario_id`,
+         WHERE id = :estoque_id`,
         {
           replacements: { estoque_id, armario_id },
           type: QueryTypes.SELECT

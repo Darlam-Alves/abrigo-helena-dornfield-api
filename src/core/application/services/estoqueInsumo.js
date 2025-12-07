@@ -1,9 +1,12 @@
-// src/core/application/services/estoqueInsumo.js
-
 class EstoqueInsumoService {
   constructor(estoqueInsumoRepository, movimentacaoService) {
     this.estoqueInsumoRepository = estoqueInsumoRepository;
     this.movimentacaoService = movimentacaoService;
+  }
+
+  async listarTodos() {
+    const estoqueInsumos = await this.estoqueInsumoRepository.findAll();
+    return estoqueInsumos;
   }
 
   /**

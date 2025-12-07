@@ -1,37 +1,47 @@
-const Residente = require('../../domain/residente');
-
 class ResidenteService {
   constructor(residenteRepository) {
     this.residenteRepository = residenteRepository;
   }
 
-  async findAll() {
-    return await this.residenteRepository.findAll();
+  /**
+   * Cadastra um novo residente após validar os dados.
+   * @param {object} residenteData - Dados do residente vindos do controller.
+   * @returns {Promise<object>} O novo residente criado.
+   */
+
+  async cadastrarNovo(residenteData) {
+    if (!residenteData.num_casela || residenteData.nome === null) {
+      throw new Error('Nome e casela são campos obrigatórios.');
+    }
+    
+    if (residenteData.num_casela <= 0) {
+      throw new Error('A casela deve ser um valor positivo.');
+    }
+
+    const novoResidente = await this.residenteRepository.create(residenteData);
+    return novoResidente;
   }
 
-  async findByCasela(casela) {
-    const residente = await this.residenteRepository.findByCasela(casela);
+  /**
+   * Lista todos os residentes.
+   * @returns {Promise<Array>} Lista de residentes.
+   */
+  async listarTodos() {
+    const residentes = await this.residenteRepository.findAll();
+    return residentes;
+  }
+
+  async buscarPorCasela(num_casela) {
+    if (!num_casela || typeof num_casela !== 'number' || num_casela <= 0) {
+      throw new Error('Número da casela inválido.');
+    }
+
+    const residente = await this.residenteRepository.findByCasela(num_casela);
+  
     if (!residente) {
-      throw new Error('Residente não encontrado');
+      throw new Error('Residente não encontrado.');
     }
     return residente;
-  }
-
-  async create(residenteData) {
-    try {
-      const residente = new Residente(residenteData.casela, residenteData.name);
-      residente.validate();
-     
-      // Verificar se já existe um residente com a mesma casela
-      const existingResidente = await this.residenteRepository.findByCasela(residente.numCasela);
-      if (existingResidente) {
-        throw new Error(`Já existe um residente com a casela ${residente.numCasela}`);
-      }
-     
-      return await this.residenteRepository.create(residente);
-    } catch (error) {
-      throw error;
-    }
   }
 
   async update(residenteData) {
@@ -51,8 +61,7 @@ class ResidenteService {
   async delete(casela) {
     try {
       // Verificar se o residente existe
-      await this.findByCasela(casela);
-     
+      await this.buscarPorCasela(casela);
       return await this.residenteRepository.delete(casela);
     } catch (error) {
       throw error;

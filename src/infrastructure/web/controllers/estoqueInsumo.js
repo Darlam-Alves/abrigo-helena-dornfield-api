@@ -1,9 +1,20 @@
-// src/infrastructure/web/controllers/estoqueInsumo.js
-
 class EstoqueInsumoController {
   constructor(estoqueInsumoService) {
     this.estoqueInsumoService = estoqueInsumoService;
   }
+
+  /**
+   * Handler para a rota GET /insumos.
+   * Lista todos os insumos cadastrados.
+   */
+  async getAll(req, res) {
+  try {
+    const estoqueInsumos = await this.estoqueInsumoService.listarTodos();
+    res.status(200).json(estoqueInsumos);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
   /**
    * Handler para a rota POST /estoque-insumos/entrada.

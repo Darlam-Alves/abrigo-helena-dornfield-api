@@ -1,7 +1,7 @@
-// src/infrastructure/database/repositories/PostgresEstoqueInsumoRepository.js
-
 const { QueryTypes } = require('sequelize');
 const sequelize = require('../connection');
+const EstoqueInsumoModel = require('../models/estoqueInsumo');
+const InsumoModel = require('../models/insumo');
 
 class PostgresEstoqueInsumoRepository {
   /**
@@ -66,6 +66,24 @@ class PostgresEstoqueInsumoRepository {
       }
     } catch (error) {
       throw new Error(`Erro ao registrar entrada de insumo: ${error.message}`);
+    }
+  }
+
+  /**
+   * Busca todos os insumos.
+   * @returns {Promise<EstoqueInsumo[]>} 
+   */
+  async findAll() {
+    try {
+      return await EstoqueInsumoModel.findAll({
+        include: [{
+          model: InsumoModel,
+          as: 'insumo',
+          attributes: ['nome', 'estoque_minimo']
+        }]
+      });
+    } catch (error) {
+      throw new Error(`Erro ao buscar insumos no estoque: ${error.message}`);
     }
   }
 

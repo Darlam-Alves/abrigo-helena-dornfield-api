@@ -37,10 +37,10 @@ class PostgresInsumoRepository {
   async findAll() {
     try {
       const insumos = await InsumoModel.findAll();
-      return insumos.map(med => new Insumo(
-        med.id,
-        med.nome,
-        med.estoque_minimo
+      return insumos.map(insumo => new Insumo(
+        insumo.id,
+        insumo.nome,
+        insumo.estoque_minimo
       ));
     } catch (error) {
       throw new Error(`Erro ao buscar insumo: ${error.message}`);

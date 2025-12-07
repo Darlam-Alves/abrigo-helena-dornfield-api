@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../connection'); 
+const MedicamentoModel = require('./medicamento');
+const ResidenteModel = require('./residente');
 
 const EstoqueMedicamentoModel = sequelize.define('EstoqueMedicamento', {
   id: {
@@ -38,6 +40,16 @@ const EstoqueMedicamentoModel = sequelize.define('EstoqueMedicamento', {
 }, {
   tableName: 'estoque_medicamento', 
   timestamps: false, 
+});
+
+EstoqueMedicamentoModel.belongsTo(MedicamentoModel, {
+  foreignKey: 'medicamento_id',
+  as: 'medicamento'
+});
+
+EstoqueMedicamentoModel.belongsTo(ResidenteModel, {
+  foreignKey: 'casela_id',
+  as: 'residente'
 });
 
 module.exports = EstoqueMedicamentoModel;

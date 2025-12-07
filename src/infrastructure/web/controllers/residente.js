@@ -3,19 +3,19 @@ class ResidenteController {
     this.residenteService = residenteService;
   }
 
-  async findAll(req, res) {
+  async getAll(req, res) {
     try {
-      const residentes = await this.residenteService.findAll();
+      const residentes = await this.residenteService.listarTodos();
       res.status(200).json(residentes);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
   }
 
-  async findByCasela(req, res) {
+  async getByCasela(req, res) {
     try {
       const casela = parseInt(req.params.casela);
-      const residente = await this.residenteService.findByCasela(casela);
+      const residente = await this.residenteService.buscarPorCasela(casela);
       res.status(200).json(residente);
     } catch (error) {
       if (error.message === 'Residente não encontrado') {
@@ -28,9 +28,9 @@ class ResidenteController {
 
   async create(req, res) {
     try {
-      const residenteData = req.body;
-      const newResidente = await this.residenteService.create(residenteData);
-      res.status(201).json(newResidente);
+      const dadosDoResidente = req.body;
+      const novoResidente = await this.residenteService.cadastrarNovo(dadosDoResidente);
+      res.status(201).json(novoResidente);
     } catch (error) {
       if (error.message.includes('Já existe um residente')) {
         res.status(409).json({ error: error.message });
