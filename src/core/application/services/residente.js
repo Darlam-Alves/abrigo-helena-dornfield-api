@@ -10,12 +10,18 @@ class ResidenteService {
    */
 
   async cadastrarNovo(residenteData) {
-    if (!residenteData.num_casela || residenteData.nome === null) {
+    if (!residenteData.num_casela || !residenteData.nome) {
       throw new Error('Nome e casela são campos obrigatórios.');
     }
     
     if (residenteData.num_casela <= 0) {
       throw new Error('A casela deve ser um valor positivo.');
+    }
+
+    // se a casela pertence a outro residente existente
+    const existente = await this.residenteRepository.findByCasela(residenteData.num_casela);
+    if (existente) {
+      throw new Error('Já existe um residente com essa casela.');
     }
 
     const novoResidente = await this.residenteRepository.create(residenteData);
@@ -44,25 +50,32 @@ class ResidenteService {
     return residente;
   }
 
-  async update(residenteData) {
+   async atualizar(residenteData) {
     try {
-      const residente = new Residente(residenteData.casela, residenteData.name);
-      residente.validate();
-     
+      if(!residenteData.num_casela) {
+        throw new Error('Número da casela é obrigatório.')
+      }
+      
       // Verificar se o residente existe
-      await this.findByCasela(residente.numCasela);
+      const existente = await this.residenteRepository.findByCasela(residenteData.num_casela);
+      if (!existente) {
+        throw new Error('Residente não encontrado');
+      }
      
-      return await this.residenteRepository.update(residente);
+      return await this.residenteRepository.update(residenteData);
     } catch (error) {
       throw error;
     }
   }
 
-  async delete(casela) {
+  async deletar(num_casela) {
     try {
-      // Verificar se o residente existe
-      await this.buscarPorCasela(casela);
-      return await this.residenteRepository.delete(casela);
+      if (!num_casela || typeof num_casela !== 'number' || num_casela <= 0) {
+        throw new Error('Número da casela inválido.')
+      }
+
+      await this.buscarPorCasela(num_casela);
+      return await this.residenteRepository.delete(num_casela);
     } catch (error) {
       throw error;
     }

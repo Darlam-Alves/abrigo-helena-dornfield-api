@@ -14,8 +14,8 @@ class ResidenteController {
 
   async getByCasela(req, res) {
     try {
-      const casela = parseInt(req.params.casela);
-      const residente = await this.residenteService.buscarPorCasela(casela);
+      const num_casela = parseInt(req.params.num_casela);
+      const residente = await this.residenteService.buscarPorCasela(num_casela);
       res.status(200).json(residente);
     } catch (error) {
       if (error.message === 'Residente não encontrado') {
@@ -42,9 +42,9 @@ class ResidenteController {
 
   async update(req, res) {
     try {
-      const casela = parseInt(req.params.casela);
-      const residenteData = { ...req.body, casela };
-      const updatedResidente = await this.residenteService.update(residenteData);
+      const num_casela = parseInt(req.params.casela);
+      const residenteData = { ...req.body, num_casela };
+      const updatedResidente = await this.residenteService.atualizar(residenteData);
       res.status(200).json(updatedResidente);
     } catch (error) {
       if (error.message === 'Residente não encontrado') {
@@ -57,8 +57,8 @@ class ResidenteController {
 
   async delete(req, res) {
     try {
-      const casela = parseInt(req.params.casela);
-      await this.residenteService.delete(casela);
+      const num_casela = parseInt(req.params.casela);
+      await this.residenteService.deletar(num_casela);
       res.status(204).send();
     } catch (error) {
       if (error.message === 'Residente não encontrado') {

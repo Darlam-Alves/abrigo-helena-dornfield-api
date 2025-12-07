@@ -1,7 +1,4 @@
 
-
-const { QueryTypes } = require('sequelize');
-const sequelize = require('../connection');
 const ResidenteModel = require('../models/residente');
 const Residente = require('../../../core/domain/residente');
 
@@ -24,13 +21,12 @@ class PostgresResidenteRepository {
 
   async findByCasela(num_casela) {
     try {
-      console.log("tentando buscar residente... para deletar");
-      const residentes = await ResidenteModel.findByPk(num_casela);
+      const residente = await ResidenteModel.findByPk(num_casela);
       
-      if (!residentes) {
+      if (!residente) {
         return null;
       }
-      console.log("residente encontrado");
+
       return new Residente(
         residente.num_casela,
         residente.nome
@@ -57,23 +53,22 @@ class PostgresResidenteRepository {
     }
   }
 
-  async update(num_casela) {
+  async update(residenteData) {
     try {
-      const residente = await ResidenteModel.findByPk(num_casela);
+      const residente = await ResidenteModel.findByPk(residenteData.num_casela);
       
       if (!residente) {
-        return null;
+        throw new Error('Residente não encontrado');
       }
 
       // Atualiza os campos
       await residente.update({
-        num_casela: residenteData.num_casela !== undefined ? residenteData.num_casela : medicamento.num_casela,
-        nome: residenteData.nome !== undefined ? residenteData.nome : medicamento.nome,
+        nome: residenteData.nome
       });
 
-      return new Medicamento(
-        medicamento.num_casela,
-        medicamento.nome        
+      return new Residente(
+        residente.num_casela,
+        residente.nome        
       );
     } catch (error) {
       throw new Error(`Erro ao atualizar residente: ${error.message}`);
