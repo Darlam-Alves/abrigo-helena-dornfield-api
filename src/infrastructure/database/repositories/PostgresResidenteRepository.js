@@ -1,114 +1,89 @@
-const sequelize = require('../connection');
-const { QueryTypes } = require('sequelize');
+
+const ResidenteModel = require('../models/residente');
+const Residente = require('../../../core/domain/residente');
 
 class PostgresResidenteRepository {
+  /**
+   * @param {object} residenteData 
+   * @returns {Promise<Residente[]>} 
+   */
   async findAll() {
     try {
-      const residentes = await sequelize.query(
-        'SELECT num_casela, nome FROM paciente ORDER BY num_casela',
-        { type: QueryTypes.SELECT }
-      );
-
-      return residentes.map(row => ({
-        casela: row.num_casela,
-        name: row.nome
-      }));
+      const residentes = await ResidenteModel.findAll();
+      return residentes.map(residente => new Residente(
+        residente.num_casela,
+        residente.nome
+      ));
     } catch (error) {
-      console.error('Erro ao buscar residentes:', error);
-      throw new Error('Erro ao buscar residentes');
+      throw new Error(`Erro ao buscar residentes: ${error.message}`);
     }
   }
 
-  async findByCasela(casela) {
+  async findByCasela(num_casela) {
     try {
-      const [residente] = await sequelize.query(
-        'SELECT num_casela, nome FROM paciente WHERE num_casela = :casela',
-        {
-          replacements: { casela },
-          type: QueryTypes.SELECT
-        }
+      const residente = await ResidenteModel.findByPk(num_casela);
+      
+      if (!residente) {
+        return null;
+      }
+
+      return new Residente(
+        residente.num_casela,
+        residente.nome
       );
-
-      if (!residente) return null;
-
-      return {
-        casela: residente.num_casela,
-        name: residente.nome
-      };
     } catch (error) {
-      console.error(`Erro ao buscar residente pela casela ${casela}:`, error);
-      throw new Error('Erro ao buscar residente');
+      throw new Error(`Erro ao buscar residente: ${error.message}`);
     }
   }
 
-  async create(residente) {
+  async create(residenteData) {
     try {
-      const [result] = await sequelize.query(
-        'INSERT INTO paciente (num_casela, nome) VALUES (:numCasela, :nome) RETURNING num_casela, nome',
-        {
-          replacements: {
-            numCasela: residente.numCasela,
-            nome: residente.nome
-          },
-          type: QueryTypes.INSERT
-        }
-      );
+      const residenteRecord = await ResidenteModel.create({
+        num_casela: residenteData.num_casela,
+        nome: residenteData.nome,
+      });
 
-      return {
-        casela: result.num_casela,
-        name: result.nome
-      };
+      return new Residente(
+        residenteRecord.num_casela,
+        residenteRecord.nome,
+      );
     } catch (error) {
-      console.error('Erro ao criar residente:', error);
-      throw new Error('Erro ao criar residente');
+
+      throw new Error(`Erro ao criar residente no banco de dados: ${error.message}`);
     }
   }
 
-  async update(residente) {
+  async update(residenteData) {
     try {
-      const [result] = await sequelize.query(
-        'UPDATE paciente SET nome = :nome WHERE num_casela = :numCasela RETURNING num_casela, nome',
-        {
-          replacements: {
-            nome: residente.nome,
-            numCasela: residente.numCasela
-          },
-          type: QueryTypes.UPDATE
-        }
-      );
-
-      if (!result || result.length === 0) {
+      const residente = await ResidenteModel.findByPk(residenteData.num_casela);
+      
+      if (!residente) {
         throw new Error('Residente não encontrado');
       }
 
-      return {
-        casela: result[0].num_casela,
-        name: result[0].nome
-      };
+      // Atualiza os campos
+      await residente.update({
+        nome: residenteData.nome
+      });
+
+      return new Residente(
+        residente.num_casela,
+        residente.nome        
+      );
     } catch (error) {
-      console.error('Erro ao atualizar residente:', error);
-      throw new Error('Erro ao atualizar residente');
+      throw new Error(`Erro ao atualizar residente: ${error.message}`);
     }
   }
 
-  async delete(casela) {
+  async delete(num_casela) {
     try {
-      const [result] = await sequelize.query(
-        'DELETE FROM paciente WHERE num_casela = :casela RETURNING num_casela, nome',
-        {
-          replacements: { casela },
-          type: QueryTypes.DELETE
-        }
-      );
+      const deleted = await ResidenteModel.destroy({
+        where: { num_casela: num_casela }
+      });
 
-      if (!result || result.length === 0) {
-        throw new Error('Residente não encontrado');
-      }
-
-      return true; // delete OK
+      return deleted > 0;
     } catch (error) {
-      console.error('Erro ao excluir residente:', error);
-      throw new Error('Erro ao excluir residente');
+      throw new Error(`Erro ao deletar residente: ${error.message}`);
     }
   }
 }

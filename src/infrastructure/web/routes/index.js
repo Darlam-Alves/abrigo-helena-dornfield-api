@@ -86,8 +86,8 @@ router.put('/insumos/:id', (req, res) => insumoController.update(req, res));
 router.delete('/insumos/:id', (req, res) => insumoController.delete(req, res));
 
 // Rotas para residentes
-router.get('/residentes', (req, res) => residenteController.findAll(req, res));
-router.get('/residentes/:casela', (req, res) => residenteController.findByCasela(req, res));
+router.get('/residentes', (req, res) => residenteController.getAll(req, res));
+router.get('/residentes/:casela', (req, res) => residenteController.getByCasela(req, res));
 router.post('/residentes', (req, res) => residenteController.create(req, res));
 router.put('/residentes/:casela', (req, res) => residenteController.update(req, res));
 router.delete('/residentes/:casela', (req, res) => residenteController.delete(req, res));
@@ -99,6 +99,7 @@ router.put('/login/:id', (req, res) => loginController.update(req, res));
 router.post('/login/auth', (req, res) => loginController.auth(req, res));
 
 // Rotas para estoque de insumos
+router.get('/estoque-insumos', (req, res) => estoqueInsumoController.getAll(req, res));
 router.post('/estoque-insumos/entrada', (req, res) => estoqueInsumoController.entrada(req, res));
 router.post('/estoque-insumos/saida', (req, res) => estoqueInsumoController.saida(req, res));
 
