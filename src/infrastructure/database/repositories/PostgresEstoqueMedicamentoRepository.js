@@ -247,6 +247,29 @@ class PostgresEstoqueMedicamentoRepository {
       throw new Error(`Erro ao verificar residente/casela: ${error.message}`);
     }
   }
+
+  async buscarEstoqueCompleto(estoque_id) {
+    const [result] = await sequelize.query(
+      `
+        SELECT 
+          id,
+          medicamento_id,
+          casela_id,
+          armario_id,
+          validade,
+          quantidade
+        FROM estoque_medicamento
+        WHERE id = :estoque_id
+        LIMIT 1
+      `,
+      {
+        replacements: { estoque_id },
+        type: sequelize.QueryTypes.SELECT
+      }
+    );  
+  
+    return result;
+  }  
 }
 
 module.exports = PostgresEstoqueMedicamentoRepository;

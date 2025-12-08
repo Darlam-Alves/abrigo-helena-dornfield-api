@@ -164,6 +164,29 @@ class PostgresEstoqueInsumoRepository {
       throw new Error(`Erro ao verificar armário: ${error.message}`);
     }
   }
+
+  async buscarEstoqueCompleto(estoque_id) {
+    const [result] = await sequelize.query(
+      `
+        SELECT 
+          id,
+          insumo_id,
+          casela_id,
+          armario_id,
+          validade,
+          quantidade
+        FROM estoque_insumo
+        WHERE id = :estoque_id
+        LIMIT 1
+      `,
+      {
+        replacements: { estoque_id },
+        type: sequelize.QueryTypes.SELECT
+      }
+    );  
+  
+    return result;
+  }  
 }
 
 module.exports = PostgresEstoqueInsumoRepository;

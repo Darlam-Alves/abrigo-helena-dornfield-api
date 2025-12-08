@@ -1,8 +1,9 @@
 // src/core/application/services/estoqueInsumo.js
 
 class EstoqueInsumoService {
-  constructor(estoqueInsumoRepository) {
+  constructor(estoqueInsumoRepository, movimentacaoService) {
     this.estoqueInsumoRepository = estoqueInsumoRepository;
+    this.movimentacaoService = movimentacaoService;
   }
 
   /**
@@ -62,6 +63,16 @@ class EstoqueInsumoService {
       quantidade: validQuantidade
     });
 
+    await this.movimentacaoService.registrar({
+      tipo: 'entrada_insumo',
+      insumo_id: validInsumoId,
+      medicamento_id: null,
+      casela_id: null,
+      armario_id: validArmarioId,
+      validade_medicamento: null,
+      quantidade: validQuantidade,
+      login_id: entradaData.login_id 
+    });    
     return resultado;
   }
 
@@ -120,6 +131,17 @@ class EstoqueInsumoService {
       insumo_id: validInsumoId,
       armario_id: validArmarioId,
       quantidade: validQuantidade
+    });
+
+    await this.movimentacaoService.registrar({
+      tipo: 'saida_insumo',
+      insumo_id: validInsumoId,
+      medicamento_id: null,
+      casela_id: null,
+      armario_id: validArmarioId,
+      validade_medicamento: null,
+      quantidade: validQuantidade,
+      login_id: saidaData.login_id
     });
 
     return resultado;
