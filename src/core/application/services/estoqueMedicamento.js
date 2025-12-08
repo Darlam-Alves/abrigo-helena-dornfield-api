@@ -1,8 +1,9 @@
 // src/core/application/services/estoqueMedicamento.js
 
 class EstoqueMedicamentoService {
-    constructor(estoqueMedicamentoRepository) {
+    constructor(estoqueMedicamentoRepository, movimentacaoService) {
       this.estoqueMedicamentoRepository = estoqueMedicamentoRepository;
+      this.movimentacaoService = movimentacaoService;
     }
 
     async listarTodos() {
@@ -16,6 +17,7 @@ class EstoqueMedicamentoService {
      * @returns {Promise<object>} Resultado da operação
      */
     async registrarEntrada(entradaData) {
+        console.log("movService:", this.movimentacaoService)
         const { medicamento_id, armario_id, quantidade, validade, origem, paciente_casela, tipo } = entradaData;
       
         // 1. CAMPOS OBRIGATÓRIOS
@@ -97,7 +99,7 @@ class EstoqueMedicamentoService {
         if (!armarioExiste) throw new Error('Armário não encontrado.');
       
         // 9. REGISTRAR
-        return await this.estoqueMedicamentoRepository.registrarEntrada({
+        const result = await this.estoqueMedicamentoRepository.registrarEntrada({
           medicamento_id: validMedicamentoId,
           armario_id: validArmarioId,
           quantidade: validQuantidade,
@@ -106,6 +108,19 @@ class EstoqueMedicamentoService {
           casela_id: validNumCasela,
           tipo: tipo.toLowerCase()
         });
+
+        await this.movimentacaoService.registrar({
+          tipo: "entrada_medicamento",
+          medicamento_id: validMedicamentoId,
+          insumo_id: null,
+          casela_id: validNumCasela,
+          armario_id: validArmarioId,
+          validade_medicamento: dataValidade,
+          quantidade: validQuantidade,
+          login_id: entradaData.login_id
+        });  
+        
+        return result;
       }        
       
       /**
@@ -132,11 +147,26 @@ class EstoqueMedicamentoService {
         const armarioExiste = await this.estoqueMedicamentoRepository.armarioExiste(validArmarioId);
         if (!armarioExiste) throw new Error('Armário não encontrado.');
     
-        return await this.estoqueMedicamentoRepository.registrarSaida({
+        const result =  await this.estoqueMedicamentoRepository.registrarSaida({
           estoque_id: validEstoqueId,
           armario_id: validArmarioId,
           quantidade: validQuantidade
         });
+
+        const estoque = await this.estoqueMedicamentoRepository.buscarEstoqueCompleto(validEstoqueId)
+
+        await this.movimentacaoService.registrar({
+          tipo: "saida_medicamento",
+          medicamento_id: estoque.medicamento_id,
+          insumo_id: null,
+          casela_id: estoque.casela_id,
+          armario_id: validArmarioId,
+          validade_medicamento: estoque.validade,
+          quantidade: estoque.quantidade,
+          login_id: saidaData.login_id
+        }); 
+        
+        return result;
       }
     }
     

@@ -29,6 +29,10 @@ const EstoqueMedicamentoController = require('../controllers/estoqueMedicamento'
 const EstoqueMedicamentoService = require('../../../core/application/services/estoqueMedicamento');
 const PostgresEstoqueMedicamentoRepository = require('../../database/repositories/PostgresEstoqueMedicamentoRepository');
 
+const MovimentacaoController = require('../controllers/movimentacao');
+const MovimentacaoService = require('../../../core/application/services/movimentacao');
+const PostgresMovimentacaoRepository = require('../../database/repositories/PostgresMovimentacaoRepository');
+
 const medicamentoRepository = new PostgresMedicamentoRepository();
 const medicamentoService = new MedicamentoService(medicamentoRepository);
 const medicamentoController = new MedicamentoController(medicamentoService);
@@ -49,12 +53,16 @@ const loginRepository = new PostgresLoginRepository();
 const loginService = new LoginService(loginRepository);
 const loginController = new LoginController(loginService);
 
+const movimentacaoRepository = new PostgresMovimentacaoRepository();
+const movimentacaoService = new MovimentacaoService(movimentacaoRepository);
+const movimentacaoController = new MovimentacaoController(movimentacaoService);
+
 const estoqueInsumoRepository = new PostgresEstoqueInsumoRepository();
-const estoqueInsumoService = new EstoqueInsumoService(estoqueInsumoRepository);
+const estoqueInsumoService = new EstoqueInsumoService(estoqueInsumoRepository, movimentacaoService);
 const estoqueInsumoController = new EstoqueInsumoController(estoqueInsumoService);
 
 const estoqueMedicamentoRepository = new PostgresEstoqueMedicamentoRepository();
-const estoqueMedicamentoService = new EstoqueMedicamentoService(estoqueMedicamentoRepository);
+const estoqueMedicamentoService = new EstoqueMedicamentoService(estoqueMedicamentoRepository, movimentacaoService);
 const estoqueMedicamentoController = new EstoqueMedicamentoController(estoqueMedicamentoService);
 
 // Rotas para medicamentos
@@ -97,5 +105,9 @@ router.post('/estoque-insumos/saida', (req, res) => estoqueInsumoController.said
 router.get('/estoque-medicamentos', (req, res) => estoqueMedicamentoController.getAll(req, res));
 router.post('/estoque-medicamentos/entrada', (req, res) => estoqueMedicamentoController.entrada(req, res));
 router.post('/estoque-medicamentos/saida', (req, res) => estoqueMedicamentoController.saida(req, res));
+
+router.get('/movimentacoes', (req, res) => movimentacaoController.getAll(req, res));
+router.get('/movimentacoes/medicamentos', (req, res) => movimentacaoController.getMedicamentos(req, res));
+router.get('/movimentacoes/insumos', (req, res) => movimentacaoController.getInsumos(req, res));
 
 module.exports = router;
